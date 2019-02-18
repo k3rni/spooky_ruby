@@ -41,8 +41,8 @@ end
 class SpookyDecoder
   MAX_POSSIBLE_DELAY = 255
   SHORT_TRANSITIONS = 8
-  RINGBUF_SIZE = 32
-  MASK = 31
+  RINGBUF_SIZE = 16
+  MASK = 15
 
   def initialize
     reset
@@ -132,9 +132,11 @@ class SpookyDecoder
         total += val
         if i == RINGBUF_SIZE - 8 - 1
           avg = total / (RINGBUF_SIZE - 8)
+          logger.info("total = #{total} avg = #{avg}")
         end
       elsif avg > 0
         long_count += 1 if approx_eq(val, 2*avg)
+        logger.info("long = #{long_count}")
       end
     end
 
